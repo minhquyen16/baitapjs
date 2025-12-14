@@ -1,0 +1,35 @@
+# Dependency directories
+node_modules/
+bower_components/
+baitap4/node_modules/
+
+# Build and cache output
+dist/
+build/
+.cache/
+out/
+
+# Logs and debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment settings
+.env
+.env.*
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Playwright artifacts
+playwright-report/
+test-results/
+blob-report/
+
+# Coverage
+coverage/
+lcov-report/
+baitap4/node_modules/
