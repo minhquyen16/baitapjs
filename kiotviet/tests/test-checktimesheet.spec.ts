@@ -11,13 +11,12 @@ test('test', async ({ page }) => {
   await page.locator('#userPasswordInp').fill('123');
   await page.getByRole('button', { name: 'Quản lý' }).click();
   // Đóng pop-up mặc định
-  await page.locator('.vodal-close').first().click();
   await page.getByRole('button', { name: 'Đánh giá sau' }).click();
   // Điều hướng tới Bảng chấm công
-  await page.getByText('Nhân viên').first().click();
+  await page.getByText('Nhân viên').first().hover();
   await page.getByRole('link', { name: 'Bảng chấm công' }).click();
   // Mở ca chưa chấm công và chọn giờ vào/ra
-  await page.getByText('Chưa chấm công').nth(0).click();
+  await page.getByText('-- -- Chưa chấm công').first().click();
   await page.getByText('Vào').click();
   await page.locator('label').filter({ hasText: 'Ra' }).click();
   // Đọc khung giờ ca và so sánh với giờ nhập
@@ -30,8 +29,8 @@ test('test', async ({ page }) => {
   // timeRange.split('-') → mảng ["07:00 ", " 11:00"] (vẫn còn khoảng trắng)
   // .map((t) => t.trim()) → trim() loại bỏ khoảng trắng đầu/cuối mỗi phần tử, thành ["07:00", "11:00"]
   const [expectedTimeIn, expectedTimeOut] = timeRange.split('-').map((t) => t.trim());
-  await expect(timeIn).toHaveValue(expectedTimeIn);
-  await expect(timeOut).toHaveValue(expectedTimeOut);
+  expect(timeIn).toHaveValue(expectedTimeIn);
+  expect(timeOut).toHaveValue(expectedTimeOut);
 
   // Lưu ca làm việc và kiểm tra thông báo thành công
   await page.getByRole('button', { name: 'Lưu' }).click();
