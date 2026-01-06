@@ -1,6 +1,6 @@
 import { request } from '@playwright/test';
 
-// Thông tin mặc định; có thể override bằng biến môi trường khi chạy test
+// Cấu hình mặc định; có thể override bằng biến môi trường
 const cfg = {
   baseURL: process.env.AUTH_BASE_URL ?? 'https://api-salon.kiotviet.vn',
   retailer: process.env.KV_RETAILER ?? 'lutest16',
@@ -13,10 +13,8 @@ const cfg = {
   tenantId: Number(process.env.KV_TENANT_ID ?? '200032924'),
 };
 
-type LoginResult = { token: string; retailer: string };
-
 // Gọi API login và trả ra JWT để dùng cho các request tiếp theo
-export async function loginAndGetToken(): Promise<LoginResult> {
+export async function loginAndGetToken() {
   const ctx = await request.newContext({
     baseURL: cfg.baseURL,
     extraHTTPHeaders: {
@@ -52,9 +50,7 @@ export async function loginAndGetToken(): Promise<LoginResult> {
   const data = await res.json();
   await ctx.dispose();
 
-  // bearerToken nằm trong data.result ở response mẫu
   const token = data?.result?.bearerToken;
-
   if (!token) {
     const keys = data && typeof data === 'object' ? Object.keys(data) : typeof data;
     throw new Error(`Không lấy được token từ response login. Keys: ${keys}`);
