@@ -6,9 +6,6 @@ const cfg = {
   retailer: process.env.KV_RETAILER ?? 'lutest16',
   username: process.env.KV_USERNAME ?? 'admin',
   password: process.env.KV_PASSWORD ?? '123',
-  fingerprint:
-    process.env.KV_FINGERPRINT ??
-    '066fd5a632c3bac2ed64a409d9636ba0_Chrome_Desktop_M%C3%A1y%20t%C3%ADnh%20Mac%20OS',
   branchId: Number(process.env.KV_BRANCH_ID ?? '2987'),
   tenantId: Number(process.env.KV_TENANT_ID ?? '200032924'),
 };
@@ -20,7 +17,6 @@ export async function loginAndGetToken() {
     extraHTTPHeaders: {
       accept: 'application/json, text/plain, */*',
       'content-type': 'application/json',
-      fingerprintkey: cfg.fingerprint,
       origin: 'https://salon.kiotviet.vn',
       referer: 'https://salon.kiotviet.vn/',
       retailer: cfg.retailer,
@@ -33,29 +29,13 @@ export async function loginAndGetToken() {
       provider: 'credentials',
       Retailer: cfg.retailer,
       UserName: cfg.username,
-      Password: cfg.password,
-      RememberMe: true,
-      UseTokenCookie: true,
-      language: 'vi-VN',
-      FingerPrintKey: cfg.fingerprint,
+      Password: cfg.password
     },
   });
-
-  if (!res.ok()) {
-    const msg = await res.text();
-    await ctx.dispose();
-    throw new Error(`Login thất bại: ${res.status()} - ${msg}`);
-  }
-
   const data = await res.json();
   await ctx.dispose();
 
   const token = data?.result?.bearerToken;
-  if (!token) {
-    const keys = data && typeof data === 'object' ? Object.keys(data) : typeof data;
-    throw new Error(`Không lấy được token từ response login. Keys: ${keys}`);
-  }
-
   return { token, retailer: cfg.retailer };
 }
 

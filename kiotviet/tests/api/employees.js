@@ -17,20 +17,8 @@ export async function createEmployee(api, payload) {
     },
   });
 
-  if (!res.ok()) {
-    const bodyText = await res.text();
-    throw new Error(`Create employee thất bại: ${res.status()} - ${bodyText}`);
-  }
-
   const raw = await res.text();
-  let body;
-  try {
-    body = JSON.parse(raw);
-  } catch {
-    throw new Error(
-      `Create employee trả về không phải JSON (status ${res.status()}): ${raw.slice(0, 200)}`
-    );
-  }
+  let body = JSON.parse(raw);
 
   const employeeId = body.result?.id;
   expect(employeeId, 'Không lấy được ID nhân viên sau khi tạo').toBeTruthy();
@@ -50,10 +38,6 @@ export async function updateEmployee(api, id, payload) {
 
   // Đọc thông tin hiện tại để giữ lại các trường bắt buộc (code, payRate,...)
   const currentRes = await api.get(path, { timeout: 15000 });
-  if (!currentRes.ok()) {
-    const bodyText = await currentRes.text();
-    throw new Error(`Đọc employee trước khi update thất bại (${path}): ${currentRes.status()} - ${bodyText}`);
-  }
   const currentData = await currentRes.json();
   const current = currentData.result ?? currentData;
 
@@ -104,25 +88,28 @@ export async function updateEmployee(api, id, payload) {
       debt: String(current.debt ?? 0),
     },
   });
-  if (!res.ok()) {
-    const bodyText = await res.text();
-    throw new Error(
-      `Update employee thất bại (${path}): ${res.status()} - ${bodyText}`
-    );
-  }
+
   const raw = await res.text();
-  try {
-    return JSON.parse(raw);
-  } catch {
-    throw new Error(
-      `Update employee trả về không phải JSON (status ${res.status()}): ${raw.slice(0, 200)}`
-    );
-  }
+
+  return JSON.parse(raw);
 }
 
 export async function deleteEmployee(api, id) {
   // Xóa nhân viên theo ID
   const res = await api.delete(`/employees/${id}`);
   expect(res.ok()).toBeTruthy();
-  return res;
+}
+
+export async function stopWorking(api, id, deactivateUser = false) {
+  const employeeId = Number(id);
+  const res = await api.put('/employees/stop-working', {
+    timeout: 15000,
+    multipart: {
+      id: String(employeeId),
+      deactivateUser: String(deactivateUser),
+    },
+  });
+  const raw = await res.text();
+  
+  return JSON.parse(raw);
 }

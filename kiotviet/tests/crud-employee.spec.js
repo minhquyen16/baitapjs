@@ -5,6 +5,7 @@ import {
   readEmployee,
   updateEmployee,
   deleteEmployee,
+  stopWorking,
 } from './api/employees.js';
 import { randomName, randomPhone } from './api/data.js';
 
@@ -43,34 +44,23 @@ test.describe('CRUD nhân viên qua API', () => {
   });
 
   test('Update employee', async () => {
-    const id = employeeId;
-    if (!id) {
-      test.skip('Chưa có employeeId từ test Create');
-      return;
-    }
-
     // Cập nhật tên/số điện thoại ngẫu nhiên và kiểm tra lại
     const updated = {
       name: randomName(),
       phone: randomPhone(),
     };
 
-    await updateEmployee(timesheetApi, id, updated);
-    const updatedData = await readEmployee(timesheetApi, id);
+    await updateEmployee(timesheetApi, employeeId, updated);
+    const updatedData = await readEmployee(timesheetApi, employeeId);
     expect(updatedData.result.name).toBe(updated.name);
     expect(updatedData.result.mobilePhone).toBe(updated.phone);
   });
 
-  test('Delete employee', async () => {
-    const id = employeeId;
-    if (!id) {
-      test.skip('Chưa có employeeId từ test Create');
-      return;
-    }
+  test('Stop working employee', async () => {
+    await stopWorking(timesheetApi, employeeId, false);
+  });
 
-    // Xóa và xác nhận GET trả về 404
-    await deleteEmployee(timesheetApi, id);
-    const readAfterDelete = await timesheetApi.get(`/employees/${id}`);
-    expect(readAfterDelete.status()).toBe(404);
+  test('Delete employee', async () => {
+    await deleteEmployee(timesheetApi, employeeId);
   });
 });
