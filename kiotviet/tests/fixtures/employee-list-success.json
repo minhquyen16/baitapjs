@@ -1,0 +1,38 @@
+{
+  "result": {
+    "total": 3,
+    "data": [
+      {
+        "id": 10000000000001,
+        "code": "NV000001",
+        "name": "Mock User 1",
+        "mobilePhone": "0900000001",
+        "branchId": 2987,
+        "createdDate": "2026-01-08T22:31:49.1403888+07:00",
+        "isActive": true,
+        "isDeleted": false
+      },
+      {
+        "id": 10000000000002,
+        "code": "NV000002",
+        "name": "Mock User 2",
+        "mobilePhone": "0900000002",
+        "branchId": 2987,
+        "createdDate": "2026-01-08T22:31:49.1403888+07:00",
+        "isActive": true,
+        "isDeleted": false
+      },
+      {
+        "id": 10000000000003,
+        "code": "NV000003",
+        "name": "Mock User 3",
+        "mobilePhone": "0900000003",
+        "branchId": 2987,
+        "createdDate": "2026-01-08T22:31:49.1403888+07:00",
+        "isActive": true,
+        "isDeleted": false
+      }
+    ]
+  },
+  "message": ""
+}
