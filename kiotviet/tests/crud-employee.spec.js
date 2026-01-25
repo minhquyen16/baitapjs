@@ -37,7 +37,7 @@ test.describe('CRUD nhân viên qua API', () => {
     const created = await createEmployee(timesheetApi, baseEmployee);
     employeeId = created.employeeId;
 
-    // Đọc lại và xác nhận thông tin
+    // Đọc lại thông tin
     const employeeData = await readEmployee(timesheetApi, employeeId);
     expect(employeeData.result.name).toBe(baseEmployee.name);
     expect(employeeData.result.mobilePhone).toBe(baseEmployee.phone);
